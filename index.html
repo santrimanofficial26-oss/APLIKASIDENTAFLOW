@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>DentaFlow - Sistem Manajemen Klinik Gigi Terpadu</title>
+
+    <!-- Meta Description & SEO -->
+    <meta name="description"
+        content="DentaFlow adalah Sistem Informasi Manajemen Klinik Gigi modern dan terintegrasi: Rekam Medis Odontogram FDI interaktif, Antrean Pasien, Billing Kasir, Farmasi BHP, dan Fee Dokter.">
+    <meta name="theme-color" content="#22B77F">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="DentaFlow">
+
+    <!-- Favicon -->
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🦷</text></svg>">
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background-color: #ECFBF7;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        /* Fullscreen Container & Iframe */
+        #appContainer {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        #dentaflowFrame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            outline: none;
+            display: block;
+            background-color: #ECFBF7;
+        }
+
+        /* Seamless Splash / Loading Overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #F5FFFC 0%, #ECFBF7 50%, #E0F8F1 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            transition: opacity 0.45s cubic-bezier(0.4, 0, 0.2, 1), visibility 0.45s ease;
+        }
+
+        #loadingOverlay.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* Brand Tooth Icon Box with Glow */
+        .icon-box {
+            width: 76px;
+            height: 76px;
+            background: linear-gradient(135deg, #55CAA0 0%, #22B77F 100%);
+            border-radius: 22px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 38px;
+            color: #ffffff;
+            box-shadow: 0 10px 25px rgba(34, 183, 127, 0.32);
+            margin-bottom: 20px;
+            animation: pulseGlow 2.4s infinite ease-in-out;
+        }
+
+        @keyframes pulseGlow {
+            0% {
+                transform: scale(1);
+                box-shadow: 0 10px 25px rgba(34, 183, 127, 0.32);
+            }
+
+            50% {
+                transform: scale(1.04);
+                box-shadow: 0 14px 32px rgba(34, 183, 127, 0.45);
+            }
+
+            100% {
+                transform: scale(1);
+                box-shadow: 0 10px 25px rgba(34, 183, 127, 0.32);
+            }
+        }
+
+        /* Typography */
+        .brand-title {
+            font-size: 1.65rem;
+            font-weight: 800;
+            color: #0D2C51;
+            letter-spacing: -0.025em;
+            margin-bottom: 6px;
+        }
+
+        .brand-tagline {
+            font-size: 0.88rem;
+            color: #536B87;
+            font-weight: 500;
+            text-align: center;
+            max-width: 320px;
+            line-height: 1.45;
+            margin-bottom: 28px;
+        }
+
+        /* Modern Spinner Ring */
+        .spinner-ring {
+            width: 42px;
+            height: 42px;
+            border: 3.5px solid rgba(34, 183, 127, 0.2);
+            border-top-color: #22B77F;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Timeout Warning Card */
+        #timeoutCard {
+            display: none;
+            margin-top: 24px;
+            background: #FFFFFF;
+            padding: 14px 20px;
+            border-radius: 12px;
+            box-shadow: 0 6px 18px rgba(13, 44, 81, 0.08);
+            border: 1px solid #E3EFEC;
+            text-align: center;
+            max-width: 340px;
+        }
+
+        #timeoutCard p {
+            font-size: 0.82rem;
+            color: #536B87;
+            margin-bottom: 12px;
+        }
+
+        .btn-reload {
+            background: #22B77F;
+            color: #FFFFFF;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.82rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .btn-reload:hover {
+            background: #16A66F;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Seamless Loading Overlay -->
+    <div id="loadingOverlay">
+        <div class="icon-box">🦷</div>
+        <h1 class="brand-title">DentaFlow</h1>
+        <p class="brand-tagline">Menghubungkan layanan klinik gigi & rekam medis digital...</p>
+        <div class="spinner-ring" id="spinner"></div>
+
+        <div id="timeoutCard">
+            <p>Memuat sedikit lebih lama dari biasanya? Pastikan koneksi internet Anda stabil.</p>
+            <button class="btn-reload" onclick="reloadApp()">Muat Ulang Aplikasi</button>
+        </div>
+    </div>
+
+    <!-- Main Web App Iframe -->
+    <div id="appContainer">
+        <iframe id="dentaflowFrame"
+            src="https://script.google.com/macros/s/AKfycbwerHJj8cMks5p2fJvw_Xk4TajbDEaRxbfb7J3GVP8IghX8kX0MlFsbqM3f0lAUi0PbDA/exec"
+            allow="fullscreen; camera; microphone; geolocation; clipboard-read; clipboard-write;"
+            sandbox="allow-forms allow-modals allow-popups allow-popups-to-escape-sandbox allow-same-origin allow-scripts allow-downloads"
+            title="DentaFlow Aplikasi Klinik Gigi">
+        </iframe>
+    </div>
+
+    <script>
+        const iframe = document.getElementById('dentaflowFrame');
+        const overlay = document.getElementById('loadingOverlay');
+        const timeoutCard = document.getElementById('timeoutCard');
+        let isLoaded = false;
+
+        function hideLoader() {
+            if (isLoaded) return;
+            isLoaded = true;
+            overlay.classList.add('fade-out');
+            setTimeout(() => {
+                overlay.style.display = 'none';
+            }, 500);
+        }
+
+        // When the Apps Script iframe finishes loading
+        iframe.addEventListener('load', function () {
+            hideLoader();
+        });
+
+        // Watchdog Timeout: In case iframe load event is suppressed, auto hide or show retry
+        setTimeout(function () {
+            if (!isLoaded) {
+                hideLoader();
+            }
+        }, 3500);
+
+        // Extended fallback to show refresh button if connection is really slow
+        setTimeout(function () {
+            if (!isLoaded && timeoutCard) {
+                timeoutCard.style.display = 'block';
+            }
+        }, 7000);
+
+        function reloadApp() {
+            if (timeoutCard) timeoutCard.style.display = 'none';
+            isLoaded = false;
+            overlay.style.display = 'flex';
+            overlay.classList.remove('fade-out');
+            iframe.src = iframe.src;
+        }
+    </script>
+</body>
+
+</html>
