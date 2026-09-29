@@ -1,8 +1,8 @@
 @echo off
 chcp 65001 > nul
-title DentaFlow - Push Vercel App to GitHub
+title StarDental - Push Vercel App to GitHub
 echo ===================================================
-echo   DENTAFLOW - PUSH VERCEL APP KE GITHUB
+echo   STARDENTAL - PUSH VERCEL APP KE GITHUB
 echo ===================================================
 echo Repo: https://github.com/santrimanofficial26-oss/APLIKASIDENTAFLOW.git
 echo.
@@ -25,7 +25,7 @@ git add .
 
 :: 3. Buat commit
 echo [3/4] Membuat commit...
-git commit -m "feat: DentaFlow Vercel iframe web application"
+git commit -m "feat: StarDental Vercel iframe web application"
 
 :: 4. Push ke GitHub (force push untuk memastikan HANYA folder ini yang ada di repo)
 echo [4/4] Melakukan git push ke branch main...
